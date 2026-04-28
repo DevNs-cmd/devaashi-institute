@@ -149,10 +149,113 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 window.scrollTo({
-                    top: targetElement.offsetTop - 80, // offset for fixed header
+                    top: targetElement.offsetTop - 130, // offset for fixed header with banner
                     behavior: 'smooth'
                 });
             }
         });
+    });
+    // 7. Course Modal Logic
+    const courseModal = document.getElementById('courseModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const enrollBtns = document.querySelectorAll('.enroll-btn');
+
+    const courses = {
+        web: {
+            title: "Web Development",
+            icon: '<i class="fa-brands fa-react"></i>',
+            duration: "6 Months",
+            level: "Advanced",
+            desc: "Become a professional full-stack developer. This course takes you from basic HTML to complex applications using the MERN stack.",
+            syllabus: ["Advanced HTML5 & CSS3", "Modern JavaScript (ES6+)", "UI/UX with Figma", "React.js Framework", "Node.js & Express", "Database with MongoDB", "State Management", "Final Capstone Project"]
+        },
+        basic: {
+            title: "Basic Computer Course",
+            icon: '<i class="fa-solid fa-laptop-code"></i>',
+            duration: "3 Months",
+            level: "Beginner",
+            desc: "The perfect starting point for your digital journey. Learn essential computer skills used in every workplace.",
+            syllabus: ["Computer Fundamentals", "Windows OS Training", "MS Office (Word, Excel, PPT)", "Internet & Emailing", "Hindi & English Typing", "Basic Hardware Knowledge", "Cyber Security Basics", "Digital Documentation"]
+        },
+        tally: {
+            title: "Tally with GST",
+            icon: '<i class="fa-solid fa-calculator"></i>',
+            duration: "4 Months",
+            level: "Intermediate",
+            desc: "Master the most popular accounting software. Learn industry-standard bookkeeping and taxation practices.",
+            syllabus: ["Accounting Principles", "Inventory Management", "GST Implementation", "Tax Deduction at Source (TDS)", "Payroll Management", "Banking & Auditing", "Generating Reports", "Financial Analysis"]
+        },
+        design: {
+            title: "Graphic Designing",
+            icon: '<i class="fa-solid fa-pen-nib"></i>',
+            duration: "6 Months",
+            level: "Intermediate",
+            desc: "Unleash your creativity and learn the tools to build stunning visual identities and digital art.",
+            syllabus: ["Design Theory & Color", "Adobe Photoshop", "Adobe Illustrator", "Adobe InDesign", "Vector Art Creation", "Branding & Logo Design", "Print Media Design", "Social Media Graphics"]
+        },
+        excel: {
+            title: "Advanced Excel",
+            icon: '<i class="fa-solid fa-file-excel"></i>',
+            duration: "2 Months",
+            level: "Advanced",
+            desc: "Go beyond basic spreadsheets. Learn to analyze data and automate business processes like a pro.",
+            syllabus: ["Complex Formulas", "Pivot Tables & Charts", "Data Validation", "Lookups (VLOOKUP, XLOOKUP)", "Power Query Basics", "Macros & VBA Intro", "Dashboard Creation", "Financial Modeling"]
+        },
+        ai: {
+            title: "AI & Emerging Tech",
+            icon: '<i class="fa-solid fa-robot"></i>',
+            duration: "8 Months",
+            level: "Advanced",
+            desc: "Step into the future of technology. Learn the foundations of AI and how to leverage modern tools.",
+            syllabus: ["Python for Data Science", "Machine Learning Intro", "Neural Networks Basics", "Generative AI Tools", "Prompt Engineering", "Natural Language Processing", "AI Project Development", "Cloud Computing Basics"]
+        }
+    };
+
+    function openModal(courseId) {
+        const course = courses[courseId];
+        if (!course) return;
+
+        document.getElementById('modalTitle').innerText = course.title;
+        document.getElementById('modalIcon').innerHTML = course.icon;
+        document.getElementById('modalDuration').innerHTML = `<i class="fa-regular fa-clock"></i> ${course.duration}`;
+        document.getElementById('modalLevel').innerText = course.level;
+        document.getElementById('modalLevel').className = `level-badge ${course.level.toLowerCase()}`;
+        document.getElementById('modalDesc').innerText = course.desc;
+
+        // Syllabus
+        const list = document.getElementById('syllabusList');
+        list.innerHTML = '';
+        course.syllabus.forEach(item => {
+            const li = document.createElement('li');
+            li.innerText = item;
+            list.appendChild(li);
+        });
+
+        // WhatsApp Link
+        const waMsg = encodeURIComponent(`Hello! I'm interested in the ${course.title} course at Devaashi Institute. Could you please provide more details?`);
+        document.getElementById('waButton').href = `https://wa.me/919560427965?text=${waMsg}`;
+
+        // Show Modal
+        courseModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+    }
+
+    enrollBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const courseId = btn.getAttribute('data-course');
+            openModal(courseId);
+        });
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        courseModal.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    // Close on click outside
+    courseModal.addEventListener('click', (e) => {
+        if (e.target === courseModal) {
+            closeModalBtn.click();
+        }
     });
 });
